@@ -5,7 +5,7 @@ import tensorflow as tf
 from tensorflow.image import rgb_to_grayscale
 from tensorflow.compat.v1 import *
 
-video = './test_video.MP4'
+video = './test_video3.MP4'
 
 font = cv2.FONT_HERSHEY_SIMPLEX
 cap1 = cv2.VideoCapture(video)
@@ -13,11 +13,12 @@ cap2 = cv2.VideoCapture(video)
 cap3 = cv2.VideoCapture(video)
 cap4 = cv2.VideoCapture(video)
 
+fps = cap1.get(cv2.CAP_PROP_FPS)
 width = int(cap1.get(cv2.CAP_PROP_FRAME_WIDTH))
 height = int(cap1.get(cv2.CAP_PROP_FRAME_HEIGHT))
 
 fourcc = cv2.VideoWriter_fourcc(*'MP4V')
-out = cv2.VideoWriter('video4.mp4', fourcc, 20.0, (640, 360))
+out = cv2.VideoWriter('result.mp4', fourcc, fps, (width, height))
 
 while(cap1.isOpened()):
     
@@ -61,13 +62,12 @@ while(cap1.isOpened()):
 
         frame4 = cv2.resize(frame4, (width//2, height//2))
         
-        disable_eager_execution() 
-        config=ConfigProto()
-        config.gpu_options.allow_growth = True 
-        sess = Session(config=ConfigProto()) 
-        image_data = sess.run(rgb_to_grayscale(frame4))
-        result4 = cv2.cvtColor(image_data, cv2.COLOR_GRAY2BGR)
-
+        enable_eager_execution()
+        image_data = rgb_to_grayscale(frame4)
+        image_data_array = image_data.numpy()
+        
+        result4 = cv2.cvtColor(image_data_array, cv2.COLOR_GRAY2BGR)
+        
         cv2.putText(result4,'Gray',(10,30), font, 1, (0,0,255),1)
         
         ###########################
@@ -79,6 +79,7 @@ while(cap1.isOpened()):
         out.write(result_video)
     else:
         break
+     
 cap1.release()
 cap2.release()
 cap3.release()

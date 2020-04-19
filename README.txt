@@ -1,1 +1,1 @@
-影片網址：https://www.youtube.com/playlist?list=PLVWOY7s7tDxA6heQclmGhkn5cD69kcOQd
+影片網址：https://www.youtube.com/watch?v=RiWbs2seZk8&t=6s
